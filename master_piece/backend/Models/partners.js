@@ -16,11 +16,13 @@ const partnerSchema = new Schema({
   businessType: { type: String, required: true },
   address: { type: String },
   storeName: { type: String },
-  storeCategory: { type: String },
+
   description: { type: String },
   photo: { type: String },
-  rating: { type: Number, required: true, min: 1, max: 5 },
   isactive: { type: Boolean, default: true },
+  catigory: [{ type: String }],
+  deliveryFee: { type: String, required: false },
+  serviesFee: { type: String, required: false },
 });
 
 const Partner = mongoose.model("Partner", partnerSchema);

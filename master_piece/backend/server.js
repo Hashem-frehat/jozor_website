@@ -7,26 +7,44 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const signuproutes = require("./Routes/signup");
 const partnerroutes = require("./Routes/partner");
-const product = require("./Routes/productroutes");
+const partnerdashRoutes = require("./Routes/partnerRoutes");
+const productRoutes = require("./Routes/productRoutes");
 
-app.use(express.json());
-app.use(
-  cors({
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+const feedbackRoutes = require("./Routes/feedbackroutes");
+
+const paymentRoutes = require("./Routes/payment");
+const requestRoutes = require("./Routes/requests");
+const userRoutes = require("./Routes/user");
+const admindashbourd = require("./Routes/admin");
+// const product = require("./Routes/productroutes");
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 // Import routes
 
 // Use routes
 app.use("/api", signuproutes);
 app.use("/partner", partnerroutes);
-app.use("/products", product);
+app.use("/api/partners", partnerdashRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/products", productRoutes);
 
+app.use("/api/feedback", feedbackRoutes);
+app.use("/api/payments", paymentRoutes);
+// app.use("/products", product);
+app.use("/api/requests", requestRoutes);
+app.use("/api/admin", admindashbourd);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

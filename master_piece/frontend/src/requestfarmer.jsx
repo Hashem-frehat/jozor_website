@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   UserCircleIcon as UserIcon,
   PhoneIcon,
@@ -7,25 +8,58 @@ import {
   CalendarDaysIcon as CalendarIcon,
   ClockIcon,
 } from "@heroicons/react/24/solid";
-
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 function RequestFarmer() {
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
     address: "",
     date: "",
     time: "",
     description: "",
   });
 
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    // Fetch user data when component mounts
+    const fetchUserData = async () => {
+      try {
+        const token = Cookies.get("tokenuser");
+        const decodedToken = jwtDecode(token);
+        const userid = decodedToken.userId;
+        const response = await axios.get(
+          `http://localhost:3000/api/user/${userid}`
+        ); // Adjust this endpoint as needed
+        setUserData(response.data);
+        console.log(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/requests/create",
+        {
+          ...formData,
+          userId: userData._id,
+        }
+      );
+      console.log("Request submitted:", response.data);
+      // Handle success (e.g., show a success message, reset form, etc.)
+    } catch (error) {
+      console.error("Error submitting request:", error);
+      // Handle error (e.g., show error message)
+    }
   };
 
   return (
@@ -48,24 +82,18 @@ function RequestFarmer() {
                 <UserIcon className="h-5 w-5 text-[#7ed958] absolute top-3 right-3 rtl:left-3 rtl:right-auto" />
                 <input
                   type="text"
-                  name="name"
-                  placeholder="الاسم الكامل"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full p-2 pr-10 rtl:pl-10 border-2 border-[#7ed958] rounded-lg focus:outline-none focus:border-[#86E85D]"
-                  required
+                  value={`${userData.firstName} ${userData.lastName}`}
+                  className="w-full p-2 pr-10 rtl:pl-10 border-2 border-[#7ed958] rounded-lg bg-gray-100"
+                  disabled
                 />
               </div>
               <div className="flex-1 relative mt-4 md:mt-0">
                 <PhoneIcon className="h-5 w-5 text-[#7ed958] absolute top-3 right-3 rtl:left-3 rtl:right-auto" />
                 <input
                   type="tel"
-                  name="phone"
-                  placeholder="رقم الهاتف"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full p-2 pr-10 rtl:pl-10 border-2 border-[#7ed958] rounded-lg focus:outline-none focus:border-[#86E85D]"
-                  required
+                  value={userData.phoneNumber}
+                  className="w-full p-2 pr-10 rtl:pl-10 border-2 border-[#7ed958] rounded-lg bg-gray-100"
+                  disabled
                 />
               </div>
             </div>
@@ -74,12 +102,9 @@ function RequestFarmer() {
               <MailIcon className="h-5 w-5 text-[#7ed958] absolute top-3 right-3 rtl:left-3 rtl:right-auto" />
               <input
                 type="email"
-                name="email"
-                placeholder="البريد الإلكتروني"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full p-2 pr-10 rtl:pl-10 border-2 border-[#7ed958] rounded-lg focus:outline-none focus:border-[#86E85D]"
-                required
+                value={userData.email}
+                className="w-full p-2 pr-10 rtl:pl-10 border-2 border-[#7ed958] rounded-lg bg-gray-100"
+                disabled
               />
             </div>
 

@@ -12,6 +12,7 @@ import googleplay from "./images/googleplay.png";
 import part1 from "./images/part1.png";
 import part2 from "./images/part2.png";
 
+
 function Visitor() {
   return (
     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">

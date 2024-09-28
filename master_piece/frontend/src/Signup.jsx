@@ -22,7 +22,8 @@ function Signup() {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/signup",
-        formData
+        formData,
+        { withCredentials: true }
       );
       if (response.data.success) {
         navigate("/login");

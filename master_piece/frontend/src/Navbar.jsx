@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import aaa from "./images/a.png";
 import { Link } from "react-router-dom";
-
+import logo from "./images/jzoorlogo.png";
 function Navbar() {
   const [isactive, setisactive] = useState("false");
   function Toggle() {

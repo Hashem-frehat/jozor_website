@@ -1,9 +1,35 @@
-const requestsSchema = new Schema({
-  address: { type: String },
-  requestDate: { type: Date, default: Date.now },
-  description: { type: String },
-  time: { type: String },
-  userId: { type: Schema.Types.ObjectId, ref: "User" },
+const mongoose = require("mongoose");
+
+const RequestSchema = new mongoose.Schema({
+  address: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  price: {
+    type: String,
+  },
+  messegefromadmin: {
+    type: String,
+  },
 });
 
-const Request = mongoose.model("Request", requestsSchema);
+const Request = mongoose.model("Request", RequestSchema);
+
+module.exports = Request;

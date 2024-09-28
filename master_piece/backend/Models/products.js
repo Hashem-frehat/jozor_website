@@ -8,8 +8,6 @@ const productSchema = new Schema({
   discount: { type: Number },
   logo: { type: String },
   partnerId: { type: Schema.Types.ObjectId, ref: "Partner", required: true },
-  averageRating: { type: Number, default: 0 },
-  ratingCount: { type: Number, default: 0 },
 });
 
 const Product = mongoose.model("Product", productSchema);

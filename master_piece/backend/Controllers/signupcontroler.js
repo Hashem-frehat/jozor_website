@@ -16,13 +16,12 @@ exports.login = async (req, res) => {
     if (!user.isactive) {
       return res.status(403).json({ message: "Your subscription has expired" });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // تعيين حسب البيئة
-      maxAge: 24 * 60 * 60 * 1000,
+    res.cookie("tokenuser", token, {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000, // ساعة واحدة
     });
     res.status(200).json({ message: "Login successful!" });
   } catch (error) {
@@ -60,10 +59,9 @@ exports.signup = async (req, res) => {
     });
 
     // Set token in cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    res.cookie("tokenuser", token, {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000, // ساعة واحدة
     });
 
     res.status(201).json({

@@ -20,10 +20,9 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // تعيين حسب البيئة
-      maxAge: 24 * 60 * 60 * 1000,
+    res.cookie("token", token, {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000, // ساعة واحدة
     });
     res.status(200).json({ message: "Login successful!" });
   } catch (error) {
@@ -33,8 +32,17 @@ exports.login = async (req, res) => {
 
 exports.signup = async (req, res) => {
   try {
-    const { firstName, lastName, phoneNumber, email, password, businessType } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      password,
+      businessType,
+      catigory,
+      storeName,
+      address,
+    } = req.body;
 
     // Check if user already exists
     const existingUser = await partners.findOne({
@@ -57,6 +65,9 @@ exports.signup = async (req, res) => {
       email,
       password: hashedPassword, // Use hashed password here
       businessType,
+      catigory,
+      storeName,
+      address,
     });
 
     await newUser.save();
@@ -68,9 +79,8 @@ exports.signup = async (req, res) => {
 
     // Set token in cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3600000, // ساعة واحدة
     });
 
     res.status(201).json({

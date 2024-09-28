@@ -19,7 +19,8 @@ function Login() {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/login",
-        formData
+        formData,
+        { withCredentials: true }
       );
       if (response.data.message === "Login successful!") {
         navigate("/"); // أو أي صفحة تريد التوجيه إليها بعد تسجيل الدخول
