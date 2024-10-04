@@ -3,6 +3,7 @@ import { Home, Settings, User, Mail } from "lucide-react";
 import { Profile } from "./Profile";
 import { Ratings } from "./Ratings";
 import { Products } from "./Products";
+import { PartnerTotalSales } from "./partnersales";
 // Placeholder components for demonstration
 const HomePage = () => <div className="p-4">Home Page Content</div>;
 const SettingsPage = () => <div className="p-4">Settings Page Content</div>;
@@ -14,6 +15,12 @@ const Layout = () => {
     { id: "home", name: "Products", icon: Home, component: Products },
     { id: "profile", name: "Profile", icon: User, component: Profile },
     { id: "messages", name: "Rating", icon: Mail, component: Ratings },
+    {
+      id: "partnerSalesPercentage",
+      name: "PartnerSalesPercentage",
+      icon: Mail,
+      component: PartnerTotalSales,
+    },
     {
       id: "settings",
       name: "Settings",

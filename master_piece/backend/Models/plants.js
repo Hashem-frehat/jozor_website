@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
 const plantsSchema = new Schema({
   plantName: { type: String },
   description: { type: String },
@@ -10,4 +13,4 @@ const plantsSchema = new Schema({
   careInstruction: { type: String },
 });
 
-const Plant = mongoose.model("Plant", plantsSchema);
+exports.Plant = mongoose.model("Plant", plantsSchema);

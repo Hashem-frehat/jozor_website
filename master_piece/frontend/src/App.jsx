@@ -1,10 +1,10 @@
 import React from "react";
 import Login from "./Login";
 import Signup from "./Signup";
-import Myaccount from "./Myaccount";
-import Deleveryaddres from "./Deleveryaddres";
-import Myorders from "./Myorders";
-import Catigory from "./Catigory";
+import Myaccount from "./userprofile/Myaccount";
+import Deleveryaddres from "./userprofile/Deleveryaddres";
+import Myorders from "./userprofile/Myorders";
+import Catigory from "./start ordering/Catigory";
 import "./App.css";
 import Visitor from "./Visitor";
 import Footer from "./Footer";
@@ -22,9 +22,10 @@ import PlantCareGuide from "./careguide";
 import Partnerlogin from "./partnercomponent/partnerlogin";
 import PartnerDashboard from "./partnercomponent/partnerdashbourd";
 import Careerpage from "./carrerpage";
-import { Profile } from "./partnercomponent/Profile";
+
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import AdminDashboard from "./dashbourdadmin";
+import AdminDashboard from "./admindashbourd/dashbourdadmin";
+
 function App() {
   const initialOptions = {
     "client-id":
@@ -33,7 +34,6 @@ function App() {
   };
   return (
     <BrowserRouter>
-      <AdminDashboard />
       <Navbar />
       <Routes>
         <Route path="login" element={<Login />} />
@@ -61,6 +61,7 @@ function App() {
         <Route path="plantsdoc" element={<Plantsdoc />} />
         <Route path="requestFarmer" element={<RequestFarmer />} />
         <Route path="careerpage" element={<Careerpage />} />
+        <Route path="adminDashboard" element={<AdminDashboard />} />
       </Routes>
       <Footer />
     </BrowserRouter>
