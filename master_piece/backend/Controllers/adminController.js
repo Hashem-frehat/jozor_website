@@ -3,6 +3,31 @@ const Partner = require("../Models/partners");
 const Request = require("../Models/requests");
 const nodemailer = require("nodemailer");
 
+// async function sendEmail(to, subject, html) {
+//   const transporter = nodemailer.createTransport({
+//     service: "outlook",
+//     auth: {
+//       user: "jozojozo123123@outlook.com",
+//       pass: "jozojozo123",
+//     },
+//   });
+
+//   const mailOptions = {
+//     from: "jozojozo123123@outlook.com",
+//     to,
+//     subject,
+//     html,
+//   };
+
+//   try {
+//     const info = await transporter.sendMail(mailOptions);
+//     console.log("Email sent: " + info.response);
+//   } catch (err) {
+//     console.error("Error sending email: " + err.message);
+//     throw err;
+//   }
+// }
+
 exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({}, "-password");
@@ -56,10 +81,6 @@ exports.updateRequest = async (req, res) => {
     const { id } = req.params;
     const { price, messegefromadmin } = req.body;
 
-    console.log(
-      `Updating request ${id} with price: ${price} and message: ${messegefromadmin}`
-    );
-
     const request = await Request.findByIdAndUpdate(
       id,
       { price, messegefromadmin },
@@ -72,34 +93,36 @@ exports.updateRequest = async (req, res) => {
 
     console.log("Request updated successfully:", request);
 
-    // Configure nodemailer transporter
-    let transporter = nodemailer.createTransport({
-      host: "smtp.office365.com", // استخدم الخادم الصحيح لـ Outlook
-      port: 587,
-      secure: false, // استخدام TLS
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
       auth: {
-        user: "jozojozo123123@outlook.com", // بريدك الإلكتروني
-        pass: "jozojozo123", // كلمة المرور (أو كلمة مرور التطبيق)
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       },
     });
 
-    // Send email to user
-    try {
-      let info = await transporter.sendMail({
-        from: "jozojozo123123@outlook.com",
-        to: request.userId.email,
-        subject: "Request Update",
-        text: `Your request has been updated. Price: ${price}, Message: ${messegefromadmin}`,
-      });
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: request.userId.email, // Send to the provided email
+      subject: "Request Update ",
+      text: `Your request has been updated. Price: ${price}, Message: ${messegefromadmin}`,
+    };
 
-      console.log("Email sent:", info.messageId);
-    } catch (emailError) {
-      console.error("Error sending email:", emailError);
-    }
-
-    res.json({ message: "Request updated successfully", request });
+    // إرسال البريد الإلكتروني
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(500).json({ error: "Error sending email" });
+      } else {
+        console.log("Email sent:", info.response);
+        return res.json({
+          message: "Request updated and email sent successfully",
+          request,
+        });
+      }
+    });
   } catch (error) {
     console.error("Error updating request:", error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };

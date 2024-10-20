@@ -7,6 +7,7 @@ exports.createPayment = async (req, res) => {
       user_id,
       partner_id,
       amount,
+      address_id,
       payment_method,
       payment_date,
       paypal_details,
@@ -19,6 +20,7 @@ exports.createPayment = async (req, res) => {
       payment_method,
       payment_date,
       paypal_details,
+      address_id,
     });
 
     await newPayment.save();
@@ -123,62 +125,64 @@ exports.getSalesPercentage = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};exports.getPartnerTotalSales = async (req, res) => {
-    try {
-      const partnerId = req.params.partnerId;
-  
-      // Validate partner ID format
-      if (!mongoose.Types.ObjectId.isValid(partnerId)) {
-        return res.status(400).json({ message: "Invalid partner ID format" });
-      }
-  
-      console.log("Fetching total sales for partnerId:", partnerId);
-  
-      // Aggregate total sales for all partners
-      const totalSales = await Payment.aggregate([
-        {
-          $group: {
-            _id: null,
-            total: { $sum: { $toDouble: "$amount" } }, // Handle Decimal128
-          },
-        },
-      ]);
-  
-      if (!totalSales.length || totalSales[0].total === 0) {
-        return res.status(404).json({ message: "No total sales found" });
-      }
-  
-      // Aggregate total sales for the specific partner
-      const partnerSales = await Payment.aggregate([
-        {
-          $match: { partner_id: new mongoose.Types.ObjectId(partnerId) }, // Use 'new'
-        },
-        {
-          $group: {
-            _id: null,
-            totalSales: { $sum: { $toDouble: "$amount" } }, // Handle Decimal128
-          },
-        },
-      ]);
-  
-      if (partnerSales.length === 0) {
-        return res.status(404).json({ message: "No sales found for this partner" });
-      }
-  
-      // Return the total sales for the partner
-      res.json({
-        partnerId: req.params.partnerId,
-        totalSales: partnerSales[0].totalSales,
-      });
-    } catch (error) {
-      console.error(
-        "Error fetching partner total sales:",
-        error.message,
-        error.stack
-      );
-      res
-        .status(500)
-        .json({ message: "Internal Server Error", error: error.message });
+};
+exports.getPartnerTotalSales = async (req, res) => {
+  try {
+    const partnerId = req.params.partnerId;
+
+    // Validate partner ID format
+    if (!mongoose.Types.ObjectId.isValid(partnerId)) {
+      return res.status(400).json({ message: "Invalid partner ID format" });
     }
-  };
-  
+
+    console.log("Fetching total sales for partnerId:", partnerId);
+
+    // Aggregate total sales for all partners
+    const totalSales = await Payment.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: { $toDouble: "$amount" } }, // Handle Decimal128
+        },
+      },
+    ]);
+
+    if (!totalSales.length || totalSales[0].total === 0) {
+      return res.status(404).json({ message: "No total sales found" });
+    }
+
+    // Aggregate total sales for the specific partner
+    const partnerSales = await Payment.aggregate([
+      {
+        $match: { partner_id: new mongoose.Types.ObjectId(partnerId) }, // Use 'new'
+      },
+      {
+        $group: {
+          _id: null,
+          totalSales: { $sum: { $toDouble: "$amount" } }, // Handle Decimal128
+        },
+      },
+    ]);
+
+    if (partnerSales.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No sales found for this partner" });
+    }
+
+    // Return the total sales for the partner
+    res.json({
+      partnerId: req.params.partnerId,
+      totalSales: partnerSales[0].totalSales,
+    });
+  } catch (error) {
+    console.error(
+      "Error fetching partner total sales:",
+      error.message,
+      error.stack
+    );
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+};

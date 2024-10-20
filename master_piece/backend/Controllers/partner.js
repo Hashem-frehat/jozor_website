@@ -40,8 +40,11 @@ exports.signup = async (req, res) => {
       password,
       businessType,
       catigory,
+      catigoryar,
       storeName,
+      storeNamearabic,
       address,
+      addressar,
     } = req.body;
 
     // Check if user already exists
@@ -66,8 +69,11 @@ exports.signup = async (req, res) => {
       password: hashedPassword, // Use hashed password here
       businessType,
       catigory,
+      catigoryar,
       storeName,
+      storeNamearabic,
       address,
+      addressar,
     });
 
     await newUser.save();

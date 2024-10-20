@@ -118,7 +118,7 @@ const Partnerlogin = () => {
             <p className="text-gray-600">
               Don't have an account?{" "}
               <Link
-                to="/partnersighnup"
+                to="/partnersignup"
                 className="text-secondary font-semibold hover:underline"
               >
                 Sign up

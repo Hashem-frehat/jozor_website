@@ -22,6 +22,7 @@ const admindashbourd = require("./Routes/admin");
 // const product = require("./Routes/productroutes");
 const plantRoutes = require("./Routes/plantRoutes");
 const addressRoutes = require("./Routes/addressRoutes");
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -62,6 +63,7 @@ app.use("/api/requests", requestRoutes);
 app.use("/api/admin", admindashbourd);
 app.use("/api/plants", plantRoutes);
 app.use("/api/addresses", addressRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

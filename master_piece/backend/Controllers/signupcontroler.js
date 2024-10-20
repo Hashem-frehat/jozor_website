@@ -50,8 +50,8 @@ exports.signup = async (req, res) => {
       email,
       password,
     });
-
     await newUser.save();
+    console.log(newUser);
 
     // Create JWT token
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {

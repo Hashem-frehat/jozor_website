@@ -21,7 +21,6 @@ exports.getallpartner = async (req, res) => {
 };
 exports.updatePartner = async (req, res) => {
   try {
-    console.log(req.body); // إضافة هذه السطر لرؤية محتوى الطلب
     const updatedPartner = await Partner.findByIdAndUpdate(
       req.params.id,
       req.body,

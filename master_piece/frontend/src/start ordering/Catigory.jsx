@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 import tanween from "../images/tanween.png";
 import Pagination from "@mui/material/Pagination";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../Navbar";
+import { LanguageContext } from "../LanguageContext";
 
 function Category() {
   const [partners, setPartners] = useState([]);
@@ -10,16 +13,20 @@ function Category() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const navigate = useNavigate();
-  // الفئات المتاحة
+  const { language } = useContext(LanguageContext);
+  const intl = useIntl();
+
+  // Available categories
   const categories = ["Sapling", "Agricultural", "Seeds", "Tools"];
 
-  // جلب البيانات من API
+  // Fetch data from API
   useEffect(() => {
     const fetchpartner = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/partners`);
-        setPartners(response.data);
-        setFilteredPartners(response.data);
+        const data = response.data.filter((datee) => datee.isactive === true);
+        setPartners(data);
+        setFilteredPartners(data);
       } catch (error) {
         console.error("Error fetching partners:", error);
       }
@@ -32,7 +39,8 @@ function Category() {
     sessionStorage.setItem("partner_id", id);
     navigate("/mainorder");
   };
-  // وظيفة البحث والفلترة
+
+  // Search and filter function
   useEffect(() => {
     const results = partners.filter((partner) => {
       const matchesSearch = partner.storeName
@@ -46,12 +54,12 @@ function Category() {
     setFilteredPartners(results);
   }, [searchTerm, selectedCategories, partners]);
 
-  // التعامل مع تغيير البحث
+  // Handle search change
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // التعامل مع تغيير الفئات
+  // Handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
@@ -62,21 +70,31 @@ function Category() {
 
   return (
     <div className="bg-gray-100 min-h-screen py-8">
+      <Navbar />
       <div className="container max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <h1 className="text-3xl font-bold p-6 border-b">Categories</h1>
+        <h1 className="text-3xl font-bold p-6 border-b">
+          <FormattedMessage id="categories" defaultMessage="Categories" />
+        </h1>
 
         <div className="flex">
           {/* Sidebar */}
           <div className="w-1/4 bg-gray-50 p-6 border-r">
-            <h2 className="text-xl font-semibold mb-4">Filter by</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              <FormattedMessage id="filterBy" defaultMessage="Filter by" />
+            </h2>
             <input
               type="search"
-              placeholder="Search..."
+              placeholder={intl.formatMessage({
+                id: "searchPlaceholder",
+                defaultMessage: "Search...",
+              })}
               className="w-full p-2 border rounded mb-4"
               value={searchTerm}
               onChange={handleSearchChange}
             />
-            <h3 className="font-semibold mb-2">Categories</h3>
+            <h3 className="font-semibold mb-2">
+              <FormattedMessage id="categories" defaultMessage="Categories" />
+            </h3>
             {categories.map((category, index) => (
               <div key={index} className="flex items-center mb-2">
                 <input
@@ -85,7 +103,12 @@ function Category() {
                   checked={selectedCategories.includes(category)}
                   onChange={() => handleCategoryChange(category)}
                 />
-                <label htmlFor={`category-${index}`}>{category}</label>
+                <label htmlFor={`category-${index}`}>
+                  <FormattedMessage
+                    id={`category.${category.toLowerCase()}`}
+                    defaultMessage={category}
+                  />
+                </label>
               </div>
             ))}
           </div>
@@ -100,14 +123,21 @@ function Category() {
               >
                 <img
                   src={tanween}
-                  alt="partner logo"
+                  alt={intl.formatMessage({
+                    id: "partnerLogoAlt",
+                    defaultMessage: "partner logo",
+                  })}
                   className="w-32 h-32 object-cover rounded-lg mr-6"
                 />
                 <div>
                   <h2 className="text-xl font-semibold mb-2">
-                    {item.storeName}
+                    {language == "en" ? item.storeName : item.storeNamearabic}
                   </h2>
-                  <p className="text-gray-600">{item.catigory}</p>
+                  <p className="text-gray-600">
+                    {language === "en"
+                      ? item.catigory.join(" ")
+                      : item.catigoryar.join(" ")}
+                  </p>
                 </div>
               </div>
             ))}

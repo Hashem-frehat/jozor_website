@@ -7,11 +7,13 @@ const PaymentSchema = new Schema({
     ref: "User",
     required: true,
   },
-  address_id: {
-    type: Schema.Types.ObjectId,
-    ref: "Address",
-    required: true,
-  },
+  address_id: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+      required: true,
+    },
+  ],
   partner_id: {
     type: Schema.Types.ObjectId,
     ref: "Partner",

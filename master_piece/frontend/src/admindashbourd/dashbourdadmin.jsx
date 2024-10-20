@@ -7,7 +7,6 @@ import { Partners } from "./partner";
 import { Requests } from "./farmerrequests";
 // Placeholder components for demonstration
 const HomePage = () => <div className="p-4">Home Page Content</div>;
-const SettingsPage = () => <div className="p-4">Settings Page Content</div>;
 
 const Layout = () => {
   const [activeTab, setActiveTab] = useState("home");

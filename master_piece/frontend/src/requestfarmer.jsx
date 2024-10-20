@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/solid";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import Navbar from "./Navbar";
 function RequestFarmer() {
   const [formData, setFormData] = useState({
     address: "",
@@ -64,6 +65,7 @@ function RequestFarmer() {
 
   return (
     <div className="min-h-screen bg-[#F1EAE3]">
+      <Navbar />
       <header className="bg-sec py-6">
         <h1 className="text-4xl font-bold text-center text-[#519335]">
           طلب مزارع محترف

@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { FunnelIcon } from "@heroicons/react/24/solid";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-
+import Navbar from "./Navbar";
 const plantsPerPage = 10;
 const plants = [
   {
@@ -398,6 +398,7 @@ const Plantsdoc = () => {
 
   return (
     <div className="min-h-screen ">
+      <Navbar />
       <main className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="relative w-full md:w-1/3 mb-4 md:mb-0">

@@ -15,12 +15,14 @@ const partnerSchema = new Schema({
   password: { type: String, required: true },
   businessType: { type: String, required: true },
   address: { type: String },
+  addressar: { type: String },
   storeName: { type: String },
-
+  storeNamearabic: { type: String },
   description: { type: String },
   photo: { type: String },
   isactive: { type: Boolean, default: true },
   catigory: [{ type: String }],
+  catigoryar: [{ type: String }],
   deliveryFee: { type: String, required: false },
   serviesFee: { type: String, required: false },
 });

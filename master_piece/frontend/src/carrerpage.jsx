@@ -10,10 +10,11 @@ import {
   Zap,
   Users as UsersIcon,
 } from "lucide-react";
-
+import Navbar from "./Navbar";
 const Careerpage = () => {
   return (
     <div className="font-sans">
+      <Navbar />
       {/* Header Section */}
       <header className="bg-orange-500 text-white p-8 flex">
         <div className="w-1/2">

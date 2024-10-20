@@ -12,8 +12,12 @@ exports.getPartnerProducts = async (req, res) => {
 exports.addProduct = async (req, res) => {
   try {
     const newProduct = new Product(req.body);
-    await newProduct.save();
-    res.status(201).json(newProduct);
+    if (req.file) {
+      newProduct.photo = req.file.path;
+    }
+    const newproducts = new Product(newProduct);
+    await newproducts.save();
+    res.status(201).json(newproducts);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
